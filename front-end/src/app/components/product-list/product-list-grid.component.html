@@ -1,17 +1,62 @@
 <div class="main-content">
   <div class="section-content section-content-p30">
+    <h4>Category: {{ currentCategoryName }}</h4>
+    <hr />
     <div class="container-fluid">
       <div class="row">
         <!-- loop over the collection of products -->
         <div *ngFor="let product of products" class="col-md-3">
           <div class="product-box">
-            <img src="{{ product.imageURL }}" class="img-responsive"/>
-            <h1>{{ product.name }}</h1>
+            <a routerLink="/products/{{ product.id }}">
+              <img src="{{ product.imageURL }}" class="img-responsive" />
+            </a>
+            <a routerLink="/products/{{ product.id }}" class="text-dark text-decoration-none">
+              <h1>{{ product.name }}</h1>
+            </a>
             <div class="price">{{ product.unitPrice }}</div>
             <a href="#" class="primary-btn">Add to Cart</a>
           </div>
         </div>
+        <!-- if product empty then display message -->
+        <div
+          *ngIf="products?.length == 0"
+          class="alert alert-warning col-md-12"
+          role="alert"
+        >
+          No Product Found :v !!!
+        </div>
       </div>
+
+      <!-- Begin footer -->
+      <div class="footer-pagination">
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-9" style="padding-left: 30%;">
+                <ngb-pagination [(page)]="thePageNumber"
+                                [pageSize]="thePageSize"
+                                [collectionSize]="theTotalElements"
+                                [maxSize]="2"
+                                (pageChange)="listProducts()">
+                <!-- This is ngb-pagination :v -->
+                </ngb-pagination>
+              </div>
+              <div class="col-md-3 mt-2" style="text-align: right;">
+                <span class="mr-2">Page Size</span>
+                <select #myPageselect (change)="updatePageSize(myPageselect.value)">
+                  <option selected="true">5</option>
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End footer -->
+
     </div>
   </div>
 </div>
