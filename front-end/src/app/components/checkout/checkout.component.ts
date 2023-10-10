@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupName, Validators } from '@angular/forms';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { CartService } from 'src/app/services/cart.service';
 import { Luv2ShopFormService } from 'src/app/services/luv2-shop-form.service';
 import { Luv2ShopValidators } from 'src/app/validators/luv2-shop-validators';
 
@@ -13,8 +14,10 @@ import { Luv2ShopValidators } from 'src/app/validators/luv2-shop-validators';
 export class CheckoutComponent implements OnInit{
   checkoutFormGroup!: FormGroup;
   billingAddressStates: any;
+
   totalPrice: number = 0;
   totalQuantity: number = 0;
+
   creditCardYears: number[] = [];
   creditCardMonths: number[] = [];
   countries: Country[] = [];
@@ -23,11 +26,14 @@ export class CheckoutComponent implements OnInit{
 
 
   constructor(private formBuilder: FormBuilder,
-              private luv2ShopFormService: Luv2ShopFormService){ }
+              private luv2ShopFormService: Luv2ShopFormService,
+              private cartService: CartService){ }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.reviewCartDetails();
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [Validators.required,
@@ -104,6 +110,17 @@ export class CheckoutComponent implements OnInit{
         console.log("Retrieved countries: " + JSON.stringify(data));
         this.countries = data;
       }
+    );
+  }
+
+  reviewCartDetails() {
+    //subscribe to cartService.totalQuantity
+    this.cartService.totalQuantity.subscribe(
+      totalQuantity => this.totalQuantity = totalQuantity
+    );
+    //subscribe to cartService.totalPrice
+    this.cartService.totalPrice.subscribe(
+      totalPrice => this.totalPrice = totalPrice
     );
   }
 
