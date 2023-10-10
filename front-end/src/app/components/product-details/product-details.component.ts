@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CartItem } from 'src/app/common/cart-item';
 import { Product } from 'src/app/common/product';
+import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -12,7 +14,8 @@ export class ProductDetailsComponent implements OnInit {
   product!: Product;
 
   constructor(private productService: ProductService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private cartService: CartService) { }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -21,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
       this.handleProductDetails();
     });
   }
+
   handleProductDetails() {
     //get the 'id' param string. Convert string to a number using the "+" symbol
     const theProductId: number = +this.route.snapshot.paramMap.get('id')!;
@@ -30,4 +34,11 @@ export class ProductDetailsComponent implements OnInit {
       }
     );
   }
+
+  addToCart(){
+    console.log(`Adding to cart: ${this.product.name}, ${this.product.unitPrice}`);
+    const theCartItem = new CartItem(this.product);
+    this.cartService.addToCart(theCartItem);
+  }
+
 }

@@ -1,7 +1,9 @@
 package com.ecommerce.springboot.config;
 
+import com.ecommerce.springboot.entity.Country;
 import com.ecommerce.springboot.entity.Product;
 import com.ecommerce.springboot.entity.ProductCategory;
+import com.ecommerce.springboot.entity.State;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,33 +33,28 @@ public class dataRESTConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theAllowedActions = {HttpMethod.GET};
 
-        config.getExposureConfiguration()
-                .forDomainType(Product.class)
-                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(
-                        Arrays.stream(HttpMethod.values())
-                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
-                                .toArray(HttpMethod[]::new)
-                ))
-                .withCollectionExposure(((metadata, httpMethods) -> httpMethods.disable(
-                        Arrays.stream(HttpMethod.values())
-                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
-                                .toArray(HttpMethod[]::new)
-                )));
+        allowHttpMethods(Product.class, config, theAllowedActions);
+        allowHttpMethods(ProductCategory.class, config, theAllowedActions);
+        allowHttpMethods(Country.class, config, theAllowedActions);
+        allowHttpMethods(State.class, config, theAllowedActions);
 
-        config.getExposureConfiguration()
-                .forDomainType(ProductCategory.class)
-                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(
-                        Arrays.stream(HttpMethod.values())
-                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
-                                .toArray(HttpMethod[]::new)
-                ))
-                .withCollectionExposure(((metadata, httpMethods) -> httpMethods.disable(
-                        Arrays.stream(HttpMethod.values())
-                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
-                                .toArray(HttpMethod[]::new)
-                )));
         //call an internal helper method
         exposeIds(config);
+    }
+
+    private static void allowHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theAllowedActions) {
+        config.getExposureConfiguration()
+                .forDomainType(theClass)
+                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(
+                        Arrays.stream(HttpMethod.values())
+                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
+                                .toArray(HttpMethod[]::new)
+                ))
+                .withCollectionExposure(((metadata, httpMethods) -> httpMethods.disable(
+                        Arrays.stream(HttpMethod.values())
+                                .filter(method -> !Arrays.asList(theAllowedActions).contains(method))
+                                .toArray(HttpMethod[]::new)
+                )));
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {
