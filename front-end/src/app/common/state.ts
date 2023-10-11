@@ -1,6 +1,6 @@
 export class State {
-  id!: number;
-  name!: string;
+  id?: number;
+  name?: string;
 
   constructor() {
 

@@ -25,6 +25,10 @@ public class OrderItem {
     private int quantity;
     @Column(name = "product_id")
     private Long productId;
+    //reference entity
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     public OrderItem(String imageURL, BigDecimal unitPrice, int quantity, Long productId) {
         this.imageURL = imageURL;

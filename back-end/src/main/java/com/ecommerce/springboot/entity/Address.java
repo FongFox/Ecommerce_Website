@@ -25,6 +25,10 @@ public class Address {
     private String country;
     @Column(name = "zip_code")
     private String zipCode;
+    //reference entity
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Order order;
 
     public Address(String street, String city, String state, String country, String zipCode) {
         this.street = street;
