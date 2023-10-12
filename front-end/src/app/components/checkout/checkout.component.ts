@@ -29,7 +29,6 @@ export class CheckoutComponent implements OnInit{
   shippingAddress: State[] = [];
   billingAddress: State[] = [];
 
-
   constructor(private formBuilder: FormBuilder,
               private luv2ShopFormService: Luv2ShopFormService,
               private cartService: CartService,
@@ -78,7 +77,7 @@ export class CheckoutComponent implements OnInit{
                                       Luv2ShopValidators.notOnlyWhiteSpace])
       }),
       creditCard: this.formBuilder.group({
-        cartType: new FormControl('',  [Validators.required]),
+        cardType: new FormControl('',  [Validators.required]),
         nameOnCard: new FormControl('',  [Validators.required,
                                           Validators.minLength(2),
                                           Luv2ShopValidators.notOnlyWhiteSpace]),
@@ -95,10 +94,10 @@ export class CheckoutComponent implements OnInit{
 
     //populate credit card months
     const startMonth: number = new Date().getMonth() + 1;
-    console.log("startMonth: " + startMonth);
+    // console.log("startMonth: " + startMonth);
     this.luv2ShopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log(`Retrive credit card months: ${JSON.stringify(data)}`);
+        // console.log(`Retrive credit card months: ${JSON.stringify(data)}`);
         this.creditCardMonths = data;
       }
     );
@@ -106,7 +105,7 @@ export class CheckoutComponent implements OnInit{
     //populate credit card year
     this.luv2ShopFormService.getCreditCardYears().subscribe(
       data => {
-        console.log(`Retrieved credit card year: ${JSON.stringify(data)}`);
+        // console.log(`Retrieved credit card year: ${JSON.stringify(data)}`);
         this.creditCardYears = data;
       }
     );
@@ -114,7 +113,7 @@ export class CheckoutComponent implements OnInit{
     //populate countries
     this.luv2ShopFormService.getCountries().subscribe(
       data => {
-        console.log("Retrieved countries: " + JSON.stringify(data));
+        // console.log("Retrieved countries: " + JSON.stringify(data));
         this.countries = data;
       }
     );
@@ -268,7 +267,7 @@ export class CheckoutComponent implements OnInit{
 
     this.luv2ShopFormService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log(`Retrive credit card months: ${JSON.stringify(data)}`);
+        // console.log(`Retrive credit card months: ${JSON.stringify(data)}`);
         this.creditCardMonths = data;
       }
     );
